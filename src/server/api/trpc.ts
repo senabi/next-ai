@@ -6,12 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
+import { auth as clerkAuth } from "@clerk/nextjs";
 
 /**
  * 1. CONTEXT
@@ -23,6 +24,7 @@ import { db } from "@/server/db";
 
 interface CreateContextOptions {
   headers: Headers;
+  auth: ReturnType<typeof clerkAuth>;
 }
 
 /**
@@ -38,6 +40,7 @@ interface CreateContextOptions {
 export const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     headers: opts.headers,
+    auth: opts.auth,
     db,
   };
 };
@@ -51,7 +54,9 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = (opts: { req: NextRequest }) => {
   // Fetch stuff that depends on the request
 
+  const auth = clerkAuth()
   return createInnerTRPCContext({
+    auth,
     headers: opts.req.headers,
   });
 };
@@ -100,3 +105,17 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+const middleware = t.middleware;
+
+const enforceAuth = middleware(async (opts) => {
+  if (!opts.ctx.auth?.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return opts.next({
+    ctx: { auth: { ...opts.ctx.auth, userId: opts.ctx.auth.userId } },
+  });
+});
+
+export const privateProcedure = t.procedure.use(enforceAuth);

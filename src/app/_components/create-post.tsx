@@ -1,43 +1,19 @@
-"use client";
+import { Button } from "@/components/loading/action-submit-button";
+import { Input } from "@/components/ui/input";
+import { api } from "@/trpc/server";
+import { revalidatePath } from "next/cache";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-import { api } from "@/trpc/react";
+async function AddPost(data: FormData) {
+  "use server";
+  await api().post.create({ name: data.get("name") as string });
+  revalidatePath("/");
+}
 
 export function CreatePost() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-
-  const createPost = api.post.create.useMutation({
-    onSuccess: () => {
-      router.refresh();
-      setName("");
-    },
-  });
-
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createPost.mutate({ name });
-      }}
-      className="flex flex-col gap-2"
-    >
-      <input
-        type="text"
-        placeholder="Title"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
-      >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
-      </button>
+    <form className="flex flex-col gap-2" action={AddPost}>
+      <Input type="text" name="name" placeholder="Title" />
+      <Button type="submit">Submit</Button>
     </form>
   );
 }
