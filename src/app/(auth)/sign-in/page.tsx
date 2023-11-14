@@ -8,7 +8,7 @@ export default function SignIn() {
   return (
     <div className="mx-auto my-auto w-full min-w-min max-w-sm py-4 md:w-7/12 md:py-9">
       <h2 className="text-xl font-semibold md:text-2xl">Sign In</h2>
-      <p className="text-muted-foreground [&_a]:ml-1">
+      <p className="text-muted-foreground text-sm [&_a]:ml-1">
         Are you new here?
         <Link className="font-medium" href="/sign-up">
           Create an account
@@ -45,10 +45,10 @@ export default function SignIn() {
               id="user_password"
             />
           </div>
-          <div className="mb-4 flex justify-between">
+          <div className="mb-4 flex justify-between text-sm">
             <Link
               className="hover:!text-blue-500 !text-muted-foreground transition-colors"
-              href="/password/new"
+              href="#"
             >
               Forgot password?
             </Link>

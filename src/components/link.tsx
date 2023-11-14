@@ -15,7 +15,7 @@ const Link = React.forwardRef<HTMLAnchorElement, CustomLinkProps>(
         ref={ref}
         className={cn(
           className,
-          "text-blue-500 hover:text-blue-300",
+          "text-blue-500 hover:text-blue-300 focus-visible:outline-ring",
         )}
         {...rest}
       />

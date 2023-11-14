@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "Next AI",
@@ -19,12 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <ClerkProvider>{children}</ClerkProvider>
-        </TRPCReactProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}
+        >
+          <TRPCReactProvider cookies={cookies().toString()}>
+            {children}
+          </TRPCReactProvider>
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
