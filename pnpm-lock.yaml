@@ -71,6 +71,9 @@ dependencies:
   drizzle-orm:
     specifier: ^0.28.5
     version: 0.28.6(@planetscale/database@1.11.0)(mysql2@3.6.3)
+  effect:
+    specifier: 2.0.0-next.55
+    version: 2.0.0-next.55
   geist:
     specifier: ^1.1.0
     version: 1.1.0(next@14.0.3-canary.9)
@@ -80,6 +83,9 @@ dependencies:
   next:
     specifier: 14.0.3-canary.9
     version: 14.0.3-canary.9(react-dom@18.2.0)(react@18.2.0)
+  next-safe-action:
+    specifier: ^5.0.3
+    version: 5.0.3(next@14.0.3-canary.9)(react@18.2.0)(zod@3.22.4)
   openai:
     specifier: ^4.17.1
     version: 4.17.1
@@ -101,9 +107,15 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.3.5)
+  ts-pattern:
+    specifier: ^5.0.5
+    version: 5.0.5
   zod:
     specifier: ^3.22.4
     version: 3.22.4
+  zod-form-data:
+    specifier: ^2.0.2
+    version: 2.0.2(zod@3.22.4)
 
 devDependencies:
   '@clerk/types':
@@ -2648,6 +2660,10 @@ packages:
       mysql2: 3.6.3
     dev: false
 
+  /effect@2.0.0-next.55:
+    resolution: {integrity: sha512-kNOB/HaDSdaFSDVXK2gyf4XcTKbKKlllyoS871uDyoJskcc+024sSOHnNioXZPgkqaz55a3mad4DFfLUIETwYQ==}
+    dev: false
+
   /electron-to-chromium@1.4.579:
     resolution: {integrity: sha512-bJKvA+awBIzYR0xRced7PrQuRIwGQPpo6ZLP62GAShahU9fWpsNN2IP6BSP1BLDDSbxvBVRGAMWlvVVq3npmLA==}
     dev: true
@@ -4007,6 +4023,19 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
+  /next-safe-action@5.0.3(next@14.0.3-canary.9)(react@18.2.0)(zod@3.22.4):
+    resolution: {integrity: sha512-97Tvu4BDA2jCSexDSgUW2H/zXizDKnudukTbqXkGXDHhpe6P3rkaUpHSBjkHSxID8ejKolPcnHBy8N+dJ8gI8g==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      next: '>= 14.0.0'
+      react: '>= 18.2.0'
+      zod: '>= 3.0.0'
+    dependencies:
+      next: 14.0.3-canary.9(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      zod: 3.22.4
+    dev: false
+
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: true
@@ -5031,6 +5060,10 @@ packages:
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
+  /ts-pattern@5.0.5:
+    resolution: {integrity: sha512-tL0w8U/pgaacOmkb9fRlYzWEUDCfVjjv9dD4wHTgZ61MjhuMt46VNWTG747NqW6vRzoWIKABVhFSOJ82FvXrfA==}
+    dev: false
+
   /tsconfig-paths@3.14.2:
     resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
     dependencies:
@@ -5317,6 +5350,14 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod-form-data@2.0.2(zod@3.22.4):
+    resolution: {integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==}
+    peerDependencies:
+      zod: '>= 3.11.0'
+    dependencies:
+      zod: 3.22.4
+    dev: false
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}

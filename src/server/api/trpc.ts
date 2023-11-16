@@ -13,8 +13,6 @@ import { ZodError } from "zod";
 
 import { db } from "@/server/db";
 import { auth } from "@clerk/nextjs";
-import { experimental_createServerActionHandler } from "@trpc/next/app-dir/server";
-import { headers } from "next/headers";
 
 /**
  * 1. CONTEXT
@@ -120,20 +118,3 @@ const enforceAuth = middleware(async (opts) => {
 });
 
 export const protectedProcedure = t.procedure.use(enforceAuth);
-
-export const createAction = experimental_createServerActionHandler(t, {
-  createContext: () => {
-    return {
-      auth: auth(),
-      headers: headers(),
-      db,
-    };
-  },
-  // createContext() {
-  //   return {
-  //     auth: auth(),
-  //     headers: headers(),
-  //     db,
-  //   };
-  // },
-});

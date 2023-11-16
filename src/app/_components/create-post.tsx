@@ -1,31 +1,46 @@
-import { Button } from "@/components/loading/action-submit-button";
-import { Input } from "@/components/ui/input";
-// import { createAction } from "@/server/api/trpc";
-// import { caller } from "@/trpc/server";
-// import { revalidatePath } from "next/cache";
-import { createPost } from "./actions";
-// import { useFormState } from "react-dom";
-// import { toast } from "sonner";
+"use client";
 
-// async function AddPost(data: FormData) {
-//   "use server";
-//   await caller().post.create({ name: data.get("name") as string });
-//   revalidatePath("/");
-// }
+import * as React from "react";
+import { Button } from "@/components/actions/loading-submit-button";
+import { Input } from "@/components/ui/input";
+import { createPostSafeAction } from "./actions";
+import { toast } from "sonner";
+import { useAction } from "next-safe-action/hook";
+import { P, match } from "ts-pattern";
 
 export function CreatePost() {
-  // const [state, formAction] = useFormState(createPost, undefined);
-  // React.useEffect(() => {
-  //   if (state?.type == "error") {
-  //     toast.error(state.error);
-  //   }
-  //   if (state?.type == "success" && state.message) {
-  //     toast.success(state.message);
-  //   }
-  // }, [state]);
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const { execute } = useAction(createPostSafeAction, {
+    onSuccess: () => {
+      formRef.current?.reset();
+    },
+    onError: (error) => {
+      match(error)
+        .with({ validationError: P.when(P.not) }, () => {
+          console.error("validationError", error.validationError);
+          toast.error("Some of the fields are invalid");
+        })
+        .with({ fetchError: P.when(P.not) }, (e) => {
+          console.error("fetchError", e.fetchError);
+          toast.error(e.fetchError);
+        })
+        .with({ serverError: P.when(P.not) }, (e) => {
+          console.error("serverError", e.serverError);
+          toast.error(e.serverError);
+        });
+    },
+  });
+
   return (
-    <form className="flex flex-col gap-2" action={createPost}>
-      <Input type="text" name="name" placeholder="Title" autoFocus />
+    <form
+      ref={formRef}
+      className="flex flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        execute(new FormData(e.currentTarget));
+      }}
+    >
+      <Input type="text" name="name" placeholder="Title" autoFocus required />
       <Button type="submit">Submit</Button>
     </form>
   );
