@@ -1,8 +1,8 @@
 import { CreatePost } from "@/app/_components/create-post";
-import { api } from "@/trpc/server";
+import { caller } from "@/trpc/server";
 
 export default async function Home() {
-  const posts = await api().post.getAll()
+  const posts = await caller().post.getAll()
 
   return (
     <div className="p-3">
@@ -15,7 +15,7 @@ export default async function Home() {
 }
 
 async function CrudShowcase() {
-  const latestPost = await api().post.getLatest();
+  const latestPost = await caller().post.getLatest();
 
   return (
     <div className="w-full max-w-xs">

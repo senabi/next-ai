@@ -12,7 +12,9 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { auth as clerkAuth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
+import { experimental_createServerActionHandler } from "@trpc/next/app-dir/server";
+import { headers } from "next/headers";
 
 /**
  * 1. CONTEXT
@@ -24,7 +26,7 @@ import { auth as clerkAuth } from "@clerk/nextjs";
 
 interface CreateContextOptions {
   headers: Headers;
-  auth: ReturnType<typeof clerkAuth>;
+  auth: ReturnType<typeof auth>;
 }
 
 /**
@@ -54,9 +56,8 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = (opts: { req: NextRequest }) => {
   // Fetch stuff that depends on the request
 
-  const auth = clerkAuth()
   return createInnerTRPCContext({
-    auth,
+    auth: auth(),
     headers: opts.req.headers,
   });
 };
@@ -118,4 +119,21 @@ const enforceAuth = middleware(async (opts) => {
   });
 });
 
-export const privateProcedure = t.procedure.use(enforceAuth);
+export const protectedProcedure = t.procedure.use(enforceAuth);
+
+export const createAction = experimental_createServerActionHandler(t, {
+  createContext: () => {
+    return {
+      auth: auth(),
+      headers: headers(),
+      db,
+    };
+  },
+  // createContext() {
+  //   return {
+  //     auth: auth(),
+  //     headers: headers(),
+  //     db,
+  //   };
+  // },
+});
